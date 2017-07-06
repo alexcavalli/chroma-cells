@@ -1,0 +1,13 @@
+.App {
+  text-align: center;
+}
+
+.App-container {
+  margin: 0 auto;
+}
+
+.App-header {
+  color: white;
+  height: 150px;
+  padding: 20px;
+}

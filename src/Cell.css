@@ -1,0 +1,15 @@
+.Cell {
+  height: 50px;
+  width: 50px;
+  background-color: white;
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.Cell-row {
+  margin-top: 5px;
+}
