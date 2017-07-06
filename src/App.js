@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import Cell from "./Cell.js";
-import "./App.css";
+import React, { Component } from 'react';
+import Cell from './Cell.js';
+import './App.css';
 
 class App extends Component {
   state = {
     colors: [
-      ["white", "white", "white"],
-      ["white", "white", "white"],
-      ["white", "white", "white"]
+      ['white', 'white', 'white'],
+      ['white', 'white', 'white'],
+      ['white', 'white', 'white']
     ],
     settings: {
       width: 3,
@@ -15,23 +15,33 @@ class App extends Component {
     }
   };
 
-  toggleColor = (x, y) => {
+  playCell = (cellX, cellY) => {
     const { colors } = this.state;
-    let newColors = [...colors];
-    let nextColor = "";
+    const { width, height } = this.state.settings;
 
-    if (colors[x][y] === "white") {
-      nextColor = "black";
-    } else {
-      nextColor = "white";
-    }
-    newColors[x][y] = nextColor;
+    let newColors = Array(height).fill().map((_, y) => {
+      return Array(width).fill().map((_, x) => {
+        if (cellX === x || cellY === y) {
+          return this.cycleColor(colors[y][x]);
+        } else {
+          return colors[y][x];
+        }
+      });
+    });
 
     this.setState({
       ...this.state,
       colors: newColors
     });
   };
+
+  cycleColor(currentColor) {
+    if (currentColor === 'white') {
+      return 'black';
+    } else {
+      return 'white';
+    }
+  }
 
   renderCellGrid() {
     const { height } = this.state.settings;
@@ -59,9 +69,9 @@ class App extends Component {
     return (
       <Cell
         onClickCell={() => {
-          this.toggleColor(x, y);
+          this.playCell(x, y);
         }}
-        color={colors[x][y]}
+        color={colors[y][x]}
       />
     );
   }
