@@ -1,15 +1,23 @@
-import React, { Component } from "react";
-import "./Cell.css";
+import React, { Component } from 'react';
+import './Cell.css';
 
 class Cell extends Component {
+  color() {
+    if (this.props.value === 0) {
+      return 'white';
+    } else {
+      return 'black';
+    }
+  }
+
   render() {
-    const { onClickCell, color } = this.props;
+    const { onClickCell } = this.props;
 
     return (
       <div
         className="Cell"
         onClick={onClickCell}
-        style={{ backgroundColor: color }}
+        style={{ backgroundColor: this.color() }}
       />
     );
   }

@@ -4,22 +4,10 @@ import './App.css';
 
 class App extends Component {
   state = {
-    colors: [
-      [
-        ['white', 'white', 'white'],
-        ['white', 'white', 'white'],
-        ['white', 'white', 'white']
-      ],
-      [
-        ['white', 'white', 'white'],
-        ['white', 'white', 'white'],
-        ['white', 'white', 'white']
-      ],
-      [
-        ['white', 'white', 'white'],
-        ['white', 'white', 'white'],
-        ['white', 'white', 'white']
-      ]
+    values: [
+      [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+      [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+      [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
     ],
     settings: {
       width: 3,
@@ -29,16 +17,16 @@ class App extends Component {
   };
 
   playCell = (cellX, cellY, cellZ) => {
-    const { colors } = this.state;
+    const { values } = this.state;
     const { width, height, depth } = this.state.settings;
 
     let newColors = Array(depth).fill().map((_, z) => {
       return Array(height).fill().map((_, y) => {
         return Array(width).fill().map((_, x) => {
           if (this.isInLineWithCell(cellX, cellY, cellZ, x, y, z)) {
-            return this.cycleColor(colors[z][y][x]);
+            return this.cycleValue(values[z][y][x]);
           } else {
-            return colors[z][y][x];
+            return values[z][y][x];
           }
         });
       });
@@ -46,7 +34,7 @@ class App extends Component {
 
     this.setState({
       ...this.state,
-      colors: newColors
+      values: newColors
     });
   };
 
@@ -58,11 +46,11 @@ class App extends Component {
     );
   }
 
-  cycleColor(currentColor) {
-    if (currentColor === 'white') {
-      return 'black';
+  cycleValue(currentValue) {
+    if (currentValue === 0) {
+      return 1;
     } else {
-      return 'white';
+      return 0;
     }
   }
 
@@ -99,14 +87,14 @@ class App extends Component {
   }
 
   renderCell(x, y, z) {
-    const { colors } = this.state;
+    const { values } = this.state;
 
     return (
       <Cell
         onClickCell={() => {
           this.playCell(x, y, z);
         }}
-        color={colors[z][y][x]}
+        value={values[z][y][x]}
       />
     );
   }
