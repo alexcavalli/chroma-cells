@@ -5,14 +5,15 @@ import './App.css';
 class App extends Component {
   state = {
     values: [
-      [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
-      [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
-      [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+      [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
+      [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
+      [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
     ],
     settings: {
       width: 3,
       height: 3,
-      depth: 3
+      depth: 3,
+      cycles: 3
     }
   };
 
@@ -47,10 +48,12 @@ class App extends Component {
   }
 
   cycleValue(currentValue) {
-    if (currentValue === 0) {
+    const { cycles } = this.state.settings;
+
+    if (currentValue === cycles) {
       return 1;
     } else {
-      return 0;
+      return currentValue + 1;
     }
   }
 
