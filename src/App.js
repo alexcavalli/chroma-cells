@@ -5,27 +5,42 @@ import './App.css';
 class App extends Component {
   state = {
     colors: [
-      ['white', 'white', 'white'],
-      ['white', 'white', 'white'],
-      ['white', 'white', 'white']
+      [
+        ['white', 'white', 'white'],
+        ['white', 'white', 'white'],
+        ['white', 'white', 'white']
+      ],
+      [
+        ['white', 'white', 'white'],
+        ['white', 'white', 'white'],
+        ['white', 'white', 'white']
+      ],
+      [
+        ['white', 'white', 'white'],
+        ['white', 'white', 'white'],
+        ['white', 'white', 'white']
+      ]
     ],
     settings: {
       width: 3,
-      height: 3 // no depth for now
+      height: 3,
+      depth: 3
     }
   };
 
-  playCell = (cellX, cellY) => {
+  playCell = (cellX, cellY, cellZ) => {
     const { colors } = this.state;
-    const { width, height } = this.state.settings;
+    const { width, height, depth } = this.state.settings;
 
-    let newColors = Array(height).fill().map((_, y) => {
-      return Array(width).fill().map((_, x) => {
-        if (cellX === x || cellY === y) {
-          return this.cycleColor(colors[y][x]);
-        } else {
-          return colors[y][x];
-        }
+    let newColors = Array(depth).fill().map((_, z) => {
+      return Array(height).fill().map((_, y) => {
+        return Array(width).fill().map((_, x) => {
+          if (this.isInLineWithCell(cellX, cellY, cellZ, x, y, z)) {
+            return this.cycleColor(colors[z][y][x]);
+          } else {
+            return colors[z][y][x];
+          }
+        });
       });
     });
 
@@ -35,6 +50,14 @@ class App extends Component {
     });
   };
 
+  isInLineWithCell(cellX, cellY, cellZ, x, y, z) {
+    return (
+      (cellX === x && cellY === y) ||
+      (cellX === x && cellZ === z) ||
+      (cellY === y && cellZ === z)
+    );
+  }
+
   cycleColor(currentColor) {
     if (currentColor === 'white') {
       return 'black';
@@ -43,35 +66,47 @@ class App extends Component {
     }
   }
 
-  renderCellGrid() {
-    const { height } = this.state.settings;
+  renderCellGrids() {
+    const { depth } = this.state.settings;
 
-    return Array(height).fill().map((_, y) => {
+    return Array(depth).fill().map((_, z) => {
       return (
-        <div className="Cell-row">
-          {this.renderCellRow(y)}
+        <div className="Cell-grid">
+          {this.renderCellGrid(z)}
         </div>
       );
     });
   }
 
-  renderCellRow(y) {
-    const { width } = this.state.settings;
+  renderCellGrid(z) {
+    const { height } = this.state.settings;
 
-    return Array(width).fill().map((_, x) => {
-      return this.renderCell(x, y);
+    return Array(height).fill().map((_, y) => {
+      return (
+        <div className="Cell-row">
+          {this.renderCellRow(y, z)}
+        </div>
+      );
     });
   }
 
-  renderCell(x, y) {
+  renderCellRow(y, z) {
+    const { width } = this.state.settings;
+
+    return Array(width).fill().map((_, x) => {
+      return this.renderCell(x, y, z);
+    });
+  }
+
+  renderCell(x, y, z) {
     const { colors } = this.state;
 
     return (
       <Cell
         onClickCell={() => {
-          this.playCell(x, y);
+          this.playCell(x, y, z);
         }}
-        color={colors[y][x]}
+        color={colors[z][y][x]}
       />
     );
   }
@@ -83,7 +118,7 @@ class App extends Component {
           <h2>Chroma Cells</h2>
         </div>
         <div className="App-container">
-          {this.renderCellGrid()}
+          {this.renderCellGrids()}
         </div>
       </div>
     );

@@ -13,3 +13,8 @@
 .Cell-row {
   margin-top: 5px;
 }
+
+.Cell-grid {
+  display: block;
+  margin: 20px 0px;
+}
