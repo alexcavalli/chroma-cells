@@ -3,19 +3,28 @@ import Cell from './Cell.js';
 import './App.css';
 
 class App extends Component {
-  state = {
-    values: [
-      [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
-      [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
-      [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
-    ],
-    settings: {
+  componentWillMount() {
+    const settings = {
       width: 3,
       height: 3,
       depth: 3,
       cycles: 3
-    }
-  };
+    };
+    const { width, height, depth } = settings;
+
+    this.state = {
+      values: this.generateDefaultValues(width, height, depth),
+      settings: settings
+    };
+  }
+
+  generateDefaultValues(width, height, depth) {
+    return Array(depth).fill().map(() => {
+      return Array(height).fill().map(() => {
+        return Array(width).fill(1);
+      });
+    });
+  }
 
   playCell = (cellX, cellY, cellZ) => {
     const { values } = this.state;
