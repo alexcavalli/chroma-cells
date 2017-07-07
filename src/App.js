@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Cell from './Cell.js';
+import Settings from './Settings.js';
 import './App.css';
 
 class App extends Component {
@@ -25,6 +26,15 @@ class App extends Component {
       });
     });
   }
+
+  startGame = settings => {
+    const { width, height, depth } = settings;
+
+    this.setState({
+      values: this.generateDefaultValues(width, height, depth),
+      settings: settings
+    });
+  };
 
   playCell = (cellX, cellY, cellZ) => {
     const { values } = this.state;
@@ -116,6 +126,9 @@ class App extends Component {
       <div className="App">
         <div className="App-header">
           <h2>Chroma Cells</h2>
+        </div>
+        <div className="App-settings">
+          <Settings onUpdateSettings={this.startGame} />
         </div>
         <div className="App-container">
           {this.renderCellGrids()}
