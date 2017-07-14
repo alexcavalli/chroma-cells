@@ -3,6 +3,7 @@ import Cell from './Cell.js';
 import Settings from './Settings.js';
 import './App.css';
 
+// TODO: Refactor this whole file, it's doing way too much.
 class App extends Component {
   componentWillMount() {
     const settings = {
@@ -30,21 +31,52 @@ class App extends Component {
   startGame = settings => {
     const { width, height, depth } = settings;
 
+    let values = this.generateDefaultValues(width, height, depth);
+    values = this.playRandomReverseCells(values, settings);
+
     this.setState({
-      values: this.generateDefaultValues(width, height, depth),
+      values: values,
       settings: settings
     });
   };
 
-  playCell = (cellX, cellY, cellZ) => {
-    const { values } = this.state;
-    const { width, height, depth } = this.state.settings;
+  playRandomReverseCells(values, settings) {
+    const { width, height, depth, cycles } = settings;
+    let numReversePlays = Math.floor(width * height * depth * cycles / 2); // play roughly half the moves
 
-    let newColors = Array(depth).fill().map((_, z) => {
+    Array(numReversePlays).fill().forEach(_ => {
+      let randomX = this.getRandomIntExclusiveMax(0, width);
+      let randomY = this.getRandomIntExclusiveMax(0, height);
+      let randomZ = this.getRandomIntExclusiveMax(0, depth);
+      values = this.playCell(
+        values,
+        settings,
+        randomX,
+        randomY,
+        randomZ,
+        this.reverseCycleValue
+      );
+    });
+    return values;
+  }
+
+  // Yanked directly from:
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+  // Move to a utils file, probably.
+  getRandomIntExclusiveMax(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+  }
+
+  playCell = (values, settings, cellX, cellY, cellZ, cycler) => {
+    const { width, height, depth, cycles } = settings;
+
+    let newValues = Array(depth).fill().map((_, z) => {
       return Array(height).fill().map((_, y) => {
         return Array(width).fill().map((_, x) => {
           if (this.isInLineWithCell(cellX, cellY, cellZ, x, y, z)) {
-            return this.cycleValue(values[z][y][x]);
+            return cycler(values[z][y][x], cycles);
           } else {
             return values[z][y][x];
           }
@@ -52,10 +84,7 @@ class App extends Component {
       });
     });
 
-    this.setState({
-      ...this.state,
-      values: newColors
-    });
+    return newValues;
   };
 
   isInLineWithCell(cellX, cellY, cellZ, x, y, z) {
@@ -66,15 +95,21 @@ class App extends Component {
     );
   }
 
-  cycleValue(currentValue) {
-    const { cycles } = this.state.settings;
-
-    if (currentValue === cycles) {
+  cycleValue = (currentValue, maxCycles) => {
+    if (currentValue === maxCycles) {
       return 1;
     } else {
       return currentValue + 1;
     }
-  }
+  };
+
+  reverseCycleValue = (currentValue, maxCycles) => {
+    if (currentValue === 1) {
+      return maxCycles;
+    } else {
+      return currentValue - 1;
+    }
+  };
 
   renderCellGrids() {
     const { depth } = this.state.settings;
@@ -114,7 +149,19 @@ class App extends Component {
     return (
       <Cell
         onClickCell={() => {
-          this.playCell(x, y, z);
+          const { values, settings } = this.state;
+          let newValues = this.playCell(
+            values,
+            settings,
+            x,
+            y,
+            z,
+            this.cycleValue
+          );
+          this.setState({
+            ...this.state,
+            values: newValues
+          });
         }}
         value={values[z][y][x]}
       />
