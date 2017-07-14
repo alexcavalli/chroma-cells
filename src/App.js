@@ -96,7 +96,7 @@ class App extends Component {
     });
 
     // Update played cell cycles
-    let playedCell = cells[cellZ][cellY][cellX];
+    let playedCell = newCells[cellZ][cellY][cellX];
     playedCell.cycle = cycler(playedCell.cycle, cycles); // mutate is ok/intentional here, we already cloned this object
 
     return newCells;
@@ -179,6 +179,7 @@ class App extends Component {
           });
         }}
         value={cells[z][y][x].value}
+        cycle={cells[z][y][x].cycle}
       />
     );
   }

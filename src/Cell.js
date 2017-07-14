@@ -13,14 +13,18 @@ class Cell extends Component {
   }
 
   render() {
-    const { onClickCell } = this.props;
+    const { onClickCell, cycle } = this.props;
 
     return (
       <div
         className="Cell"
         onClick={onClickCell}
         style={{ backgroundColor: this.color() }}
-      />
+      >
+        <p style={{ color: 'green' }}>
+          {cycle}
+        </p>
+      </div>
     );
   }
 }
