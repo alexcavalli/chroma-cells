@@ -15,12 +15,12 @@ class App extends Component {
     const { width, height, depth } = settings;
 
     this.state = {
-      values: this.generateDefaultValues(width, height, depth),
+      cells: this.generateDefaultCells(width, height, depth),
       settings: settings
     };
   }
 
-  generateDefaultValues(width, height, depth) {
+  generateDefaultCells(width, height, depth) {
     return Array(depth).fill().map(() => {
       return Array(height).fill().map(() => {
         return Array(width).fill().map(() => {
@@ -36,16 +36,16 @@ class App extends Component {
   startGame = settings => {
     const { width, height, depth } = settings;
 
-    let values = this.generateDefaultValues(width, height, depth);
-    values = this.playRandomReverseCells(values, settings);
+    let cells = this.generateDefaultCells(width, height, depth);
+    cells = this.playRandomReverseCells(cells, settings);
 
     this.setState({
-      values: values,
+      cells: cells,
       settings: settings
     });
   };
 
-  playRandomReverseCells(values, settings) {
+  playRandomReverseCells(cells, settings) {
     const { width, height, depth, cycles } = settings;
     let numReversePlays = Math.floor(width * height * depth * cycles / 2); // play roughly half the moves
 
@@ -53,8 +53,8 @@ class App extends Component {
       let randomX = this.getRandomIntExclusiveMax(0, width);
       let randomY = this.getRandomIntExclusiveMax(0, height);
       let randomZ = this.getRandomIntExclusiveMax(0, depth);
-      values = this.playCell(
-        values,
+      cells = this.playCell(
+        cells,
         settings,
         randomX,
         randomY,
@@ -62,7 +62,7 @@ class App extends Component {
         this.reverseCycleValue
       );
     });
-    return values;
+    return cells;
   }
 
   // Yanked directly from:
@@ -74,32 +74,32 @@ class App extends Component {
     return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
   }
 
-  playCell = (values, settings, cellX, cellY, cellZ, cycler) => {
+  playCell = (cells, settings, cellX, cellY, cellZ, cycler) => {
     const { width, height, depth, cycles } = settings;
 
     // Update all cells' values in line with the played cell (including played cell)
-    let newValues = Array(depth).fill().map((_, z) => {
+    let newCells = Array(depth).fill().map((_, z) => {
       return Array(height).fill().map((_, y) => {
         return Array(width).fill().map((_, x) => {
           if (this.isInLineWithCell(cellX, cellY, cellZ, x, y, z)) {
-            let newValue = cycler(values[z][y][x].value, cycles);
+            let newValue = cycler(cells[z][y][x].value, cycles);
             return {
-              ...values[z][y][x],
+              ...cells[z][y][x],
               value: newValue
             };
           } else {
             // adjacent board states will share these object refs. This is probably ok.
-            return values[z][y][x];
+            return cells[z][y][x];
           }
         });
       });
     });
 
     // Update played cell cycles
-    let playedCell = values[cellZ][cellY][cellX];
+    let playedCell = cells[cellZ][cellY][cellX];
     playedCell.cycle = cycler(playedCell.cycle, cycles); // mutate is ok/intentional here, we already cloned this object
 
-    return newValues;
+    return newCells;
   };
 
   isInLineWithCell(cellX, cellY, cellZ, x, y, z) {
@@ -159,14 +159,14 @@ class App extends Component {
   }
 
   renderCell(x, y, z) {
-    const { values } = this.state;
+    const { cells } = this.state;
 
     return (
       <Cell
         onClickCell={() => {
-          const { values, settings } = this.state;
-          let newValues = this.playCell(
-            values,
+          const { cells, settings } = this.state;
+          let newCells = this.playCell(
+            cells,
             settings,
             x,
             y,
@@ -175,10 +175,10 @@ class App extends Component {
           );
           this.setState({
             ...this.state,
-            values: newValues
+            cells: newCells
           });
         }}
-        value={values[z][y][x].value}
+        value={cells[z][y][x].value}
       />
     );
   }
