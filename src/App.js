@@ -23,7 +23,12 @@ class App extends Component {
   generateDefaultValues(width, height, depth) {
     return Array(depth).fill().map(() => {
       return Array(height).fill().map(() => {
-        return Array(width).fill(1);
+        return Array(width).fill().map(() => {
+          return {
+            value: 1,
+            cycle: 1
+          };
+        });
       });
     });
   }
@@ -44,7 +49,7 @@ class App extends Component {
     const { width, height, depth, cycles } = settings;
     let numReversePlays = Math.floor(width * height * depth * cycles / 2); // play roughly half the moves
 
-    Array(numReversePlays).fill().forEach(_ => {
+    Array(numReversePlays).fill().forEach(() => {
       let randomX = this.getRandomIntExclusiveMax(0, width);
       let randomY = this.getRandomIntExclusiveMax(0, height);
       let randomZ = this.getRandomIntExclusiveMax(0, depth);
@@ -72,17 +77,27 @@ class App extends Component {
   playCell = (values, settings, cellX, cellY, cellZ, cycler) => {
     const { width, height, depth, cycles } = settings;
 
+    // Update all cells' values in line with the played cell (including played cell)
     let newValues = Array(depth).fill().map((_, z) => {
       return Array(height).fill().map((_, y) => {
         return Array(width).fill().map((_, x) => {
           if (this.isInLineWithCell(cellX, cellY, cellZ, x, y, z)) {
-            return cycler(values[z][y][x], cycles);
+            let newValue = cycler(values[z][y][x].value, cycles);
+            return {
+              ...values[z][y][x],
+              value: newValue
+            };
           } else {
+            // adjacent board states will share these object refs. This is probably ok.
             return values[z][y][x];
           }
         });
       });
     });
+
+    // Update played cell cycles
+    let playedCell = values[cellZ][cellY][cellX];
+    playedCell.cycle = cycler(playedCell.cycle, cycles); // mutate is ok/intentional here, we already cloned this object
 
     return newValues;
   };
@@ -163,7 +178,7 @@ class App extends Component {
             values: newValues
           });
         }}
-        value={values[z][y][x]}
+        value={values[z][y][x].value}
       />
     );
   }
