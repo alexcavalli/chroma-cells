@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import './Settings.css';
 
 class Settings extends Component {
-  state = {
-    width: 3,
-    height: 3,
-    depth: 1,
-    cycles: 2
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      ...props.settings
+    };
+  }
 
   updateSetting = (setting, value) => {
     this.setState({
@@ -29,7 +29,7 @@ class Settings extends Component {
         >
           {options.map(opt => {
             return (
-              <option value={opt}>
+              <option key={opt} value={opt}>
                 {opt}
               </option>
             );

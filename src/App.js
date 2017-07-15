@@ -1,137 +1,36 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { actionCreators } from './appRedux';
 import Cell from './Cell.js';
 import Settings from './Settings.js';
 import './App.css';
 
+const mapStateToProps = state => ({
+  settings: state.settings,
+  cells: state.cells
+});
+
 // TODO: Refactor this whole file, it's doing way too much.
 class App extends Component {
-  componentWillMount() {
-    const settings = {
-      width: 3,
-      height: 3,
-      depth: 3,
-      cycles: 3
-    };
-    const { width, height, depth } = settings;
+  onPlayCell(cellCoords) {
+    const { dispatch } = this.props;
 
-    this.state = {
-      cells: this.generateDefaultCells(width, height, depth),
-      settings: settings
-    };
+    dispatch(actionCreators.playCell(cellCoords));
   }
 
-  generateDefaultCells(width, height, depth) {
-    return Array(depth).fill().map(() => {
-      return Array(height).fill().map(() => {
-        return Array(width).fill().map(() => {
-          return {
-            value: 1,
-            cycle: 1
-          };
-        });
-      });
-    });
-  }
+  onStartGame = settings => {
+    const { dispatch } = this.props;
 
-  startGame = settings => {
-    const { width, height, depth } = settings;
-
-    let cells = this.generateDefaultCells(width, height, depth);
-    cells = this.playRandomReverseCells(cells, settings);
-
-    this.setState({
-      cells: cells,
-      settings: settings
-    });
-  };
-
-  playRandomReverseCells(cells, settings) {
-    const { width, height, depth, cycles } = settings;
-    let numReversePlays = Math.floor(width * height * depth * cycles / 2); // play roughly half the moves
-
-    Array(numReversePlays).fill().forEach(() => {
-      let randomX = this.getRandomIntExclusiveMax(0, width);
-      let randomY = this.getRandomIntExclusiveMax(0, height);
-      let randomZ = this.getRandomIntExclusiveMax(0, depth);
-      cells = this.playCell(
-        cells,
-        settings,
-        randomX,
-        randomY,
-        randomZ,
-        this.reverseCycleValue
-      );
-    });
-    return cells;
-  }
-
-  // Yanked directly from:
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-  // Move to a utils file, probably.
-  getRandomIntExclusiveMax(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-  }
-
-  playCell = (cells, settings, cellX, cellY, cellZ, cycler) => {
-    const { width, height, depth, cycles } = settings;
-
-    // Update all cells' values in line with the played cell (including played cell)
-    let newCells = Array(depth).fill().map((_, z) => {
-      return Array(height).fill().map((_, y) => {
-        return Array(width).fill().map((_, x) => {
-          if (this.isInLineWithCell(cellX, cellY, cellZ, x, y, z)) {
-            let newValue = cycler(cells[z][y][x].value, cycles);
-            return {
-              ...cells[z][y][x],
-              value: newValue
-            };
-          } else {
-            // adjacent board states will share these object refs. This is probably ok.
-            return cells[z][y][x];
-          }
-        });
-      });
-    });
-
-    // Update played cell cycles
-    let playedCell = newCells[cellZ][cellY][cellX];
-    playedCell.cycle = cycler(playedCell.cycle, cycles); // mutate is ok/intentional here, we already cloned this object
-
-    return newCells;
-  };
-
-  isInLineWithCell(cellX, cellY, cellZ, x, y, z) {
-    return (
-      (cellX === x && cellY === y) ||
-      (cellX === x && cellZ === z) ||
-      (cellY === y && cellZ === z)
-    );
-  }
-
-  cycleValue = (currentValue, maxCycles) => {
-    if (currentValue === maxCycles) {
-      return 1;
-    } else {
-      return currentValue + 1;
-    }
-  };
-
-  reverseCycleValue = (currentValue, maxCycles) => {
-    if (currentValue === 1) {
-      return maxCycles;
-    } else {
-      return currentValue - 1;
-    }
+    dispatch(actionCreators.startGame(settings));
   };
 
   renderCellGrids() {
-    const { depth } = this.state.settings;
+    const { depth } = this.props.settings;
 
     return Array(depth).fill().map((_, z) => {
       return (
-        <div className="Cell-grid">
+        <div key={['grid', z].join('-')} className="Cell-grid">
           {this.renderCellGrid(z)}
         </div>
       );
@@ -139,11 +38,11 @@ class App extends Component {
   }
 
   renderCellGrid(z) {
-    const { height } = this.state.settings;
+    const { height } = this.props.settings;
 
     return Array(height).fill().map((_, y) => {
       return (
-        <div className="Cell-row">
+        <div key={['row', y, z].join('-')} className="Cell-row">
           {this.renderCellRow(y, z)}
         </div>
       );
@@ -151,7 +50,7 @@ class App extends Component {
   }
 
   renderCellRow(y, z) {
-    const { width } = this.state.settings;
+    const { width } = this.props.settings;
 
     return Array(width).fill().map((_, x) => {
       return this.renderCell(x, y, z);
@@ -159,39 +58,29 @@ class App extends Component {
   }
 
   renderCell(x, y, z) {
-    const { cells } = this.state;
+    const { cells } = this.props;
 
     return (
       <Cell
         onClickCell={() => {
-          const { cells, settings } = this.state;
-          let newCells = this.playCell(
-            cells,
-            settings,
-            x,
-            y,
-            z,
-            this.cycleValue
-          );
-          this.setState({
-            ...this.state,
-            cells: newCells
-          });
+          this.onPlayCell([x, y, z]);
         }}
         value={cells[z][y][x].value}
         cycle={cells[z][y][x].cycle}
+        key={[x, y, z].join('-')}
       />
     );
   }
 
   render() {
+    const { settings } = this.props;
     return (
       <div className="App">
         <div className="App-header">
           <h2>Chroma Cells</h2>
         </div>
         <div className="App-settings">
-          <Settings onUpdateSettings={this.startGame} />
+          <Settings settings={settings} onUpdateSettings={this.onStartGame} />
         </div>
         <div className="App-container">
           {this.renderCellGrids()}
@@ -201,4 +90,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(mapStateToProps)(App);
