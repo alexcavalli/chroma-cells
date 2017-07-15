@@ -11,7 +11,6 @@ const mapStateToProps = state => ({
   cells: state.cells
 });
 
-// TODO: Refactor this whole file, it's doing way too much.
 class App extends Component {
   onPlayCell(cellCoords) {
     const { dispatch } = this.props;
