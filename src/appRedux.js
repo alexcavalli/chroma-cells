@@ -27,14 +27,19 @@ const initialSettings = {
   depth: 1,
   cycles: 2
 };
-const initialCells = CellActions.generateDefaultCells(
+let initialCells = CellActions.generateDefaultCells(
   initialSettings.width,
   initialSettings.height,
   initialSettings.depth
 );
+initialCells = CellActions.playRandomReverseCells(
+  initialCells,
+  initialSettings
+);
 const initialState = {
   settings: initialSettings,
-  cells: initialCells
+  cells: initialCells,
+  win: false
 };
 
 export const reducer = (state = initialState, action) => {
@@ -51,7 +56,8 @@ export const reducer = (state = initialState, action) => {
 
       return {
         cells: cells,
-        settings: settings
+        settings: settings,
+        win: false // there's an edge case that the generated board could be a win.
       };
     }
     case types.PLAY_CELL: {
@@ -67,9 +73,11 @@ export const reducer = (state = initialState, action) => {
         z,
         CellActions.cycleValue
       );
+      let isWin = CellActions.allSameValue(newCells);
       return {
         ...state,
-        cells: newCells
+        cells: newCells,
+        win: isWin
       };
     }
     case types.REVERSE_PLAY_CELL: {
@@ -84,9 +92,11 @@ export const reducer = (state = initialState, action) => {
         z,
         CellActions.reverseCycleValue
       );
+      let isWin = CellActions.allSameValue(newCells);
       return {
         ...state,
-        cells: newCells
+        cells: newCells,
+        win: isWin
       };
     }
     default: {

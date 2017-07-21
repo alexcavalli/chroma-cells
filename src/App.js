@@ -8,7 +8,8 @@ import './App.css';
 
 const mapStateToProps = state => ({
   settings: state.settings,
-  cells: state.cells
+  cells: state.cells,
+  win: state.win
 });
 
 class App extends Component {
@@ -72,11 +73,12 @@ class App extends Component {
   }
 
   render() {
-    const { settings } = this.props;
+    const { settings, win } = this.props;
     return (
       <div className="App">
         <div className="App-header">
           <h2>Chroma Cells</h2>
+          {win && <h2>You win.</h2>}
         </div>
         <div className="App-settings">
           <Settings settings={settings} onUpdateSettings={this.onStartGame} />

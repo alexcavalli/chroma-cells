@@ -95,4 +95,15 @@ export default class CellActions {
       return currentValue - 1;
     }
   }
+
+  static allSameValue(cells) {
+    const checkValue = cells[0][0][0].value;
+    return cells.every(level => {
+      return level.every(row => {
+        return row.every(cell => {
+          return cell.value == checkValue;
+        });
+      });
+    });
+  }
 }
