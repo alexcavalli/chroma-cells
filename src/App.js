@@ -66,7 +66,6 @@ class App extends Component {
           this.onPlayCell([x, y, z]);
         }}
         value={cells[z][y][x].value}
-        cycle={cells[z][y][x].cycle}
         key={[x, y, z].join('-')}
       />
     );
