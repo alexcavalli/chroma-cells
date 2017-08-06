@@ -3,14 +3,22 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import './Cell.css';
 
 class Cell extends Component {
+  constructor(props) {
+    super(props);
+    this.colors = [{ h: 191, s: 65 }, { h: 132, s: 55 }, { h: 0, s: 65 }];
+  }
+
   color() {
-    if (this.props.value === 1) {
-      return 'blue';
-    } else if (this.props.value === 2) {
-      return 'black';
-    } else {
-      return 'red';
-    }
+    let baseColor = this.colors[this.props.value - 1];
+    let baseColorHsl = { ...baseColor, l: 50 };
+    let finalColorHsl = { ...baseColor, l: 70 };
+    return `linear-gradient(to right top, ${this.serializeHsl(
+      baseColorHsl
+    )}, ${this.serializeHsl(finalColorHsl)})`;
+  }
+
+  serializeHsl(hslProps) {
+    return `hsl(${hslProps.h}, ${hslProps.s}%, ${hslProps.l}%)`;
   }
 
   render() {
@@ -26,7 +34,7 @@ class Cell extends Component {
         transitionLeaveTimeout={300}
       >
         <div className="Cell-flipper" key={value}>
-          <div className="Cell-panel" style={{ backgroundColor: this.color() }}>
+          <div className="Cell-panel" style={{ backgroundImage: this.color() }}>
             <p style={{ color: 'white' }}>
               {cycle}
             </p>

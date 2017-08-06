@@ -63,7 +63,7 @@ export const reducer = (state = initialState, action) => {
         cells: cells,
         settings: settings,
         win: false, // there's an edge case that the generated board could be a win.
-        cheatMode: true
+        cheatMode: false
       };
     }
     case types.PLAY_CELL: {
