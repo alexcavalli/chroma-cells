@@ -9,7 +9,8 @@ import './App.css';
 const mapStateToProps = state => ({
   settings: state.settings,
   cells: state.cells,
-  win: state.win
+  win: state.win,
+  cheatMode: state.cheatMode
 });
 
 class App extends Component {
@@ -23,6 +24,12 @@ class App extends Component {
     const { dispatch } = this.props;
 
     dispatch(actionCreators.startGame(settings));
+  };
+
+  onToggleCheatMode = () => {
+    const { dispatch } = this.props;
+
+    dispatch(actionCreators.toggleCheatMode());
   };
 
   renderCellGrids() {
@@ -58,14 +65,17 @@ class App extends Component {
   }
 
   renderCell(x, y, z) {
-    const { cells } = this.props;
+    const { cells, cheatMode } = this.props;
+    const thisCell = cells[z][y][x];
+    const cycle = cheatMode && thisCell.cycle;
 
     return (
       <Cell
         onClickCell={() => {
           this.onPlayCell([x, y, z]);
         }}
-        value={cells[z][y][x].value}
+        value={thisCell.value}
+        cycle={cycle}
         key={[x, y, z].join('-')}
       />
     );
@@ -81,6 +91,7 @@ class App extends Component {
         </div>
         <div className="App-settings">
           <Settings settings={settings} onUpdateSettings={this.onStartGame} />
+          <button onClick={this.onToggleCheatMode}>Cheat Mode</button>
         </div>
         <div className="App-container">
           {this.renderCellGrids()}

@@ -101,7 +101,7 @@ export default class CellActions {
     return cells.every(level => {
       return level.every(row => {
         return row.every(cell => {
-          return cell.value == checkValue;
+          return cell.value === checkValue;
         });
       });
     });

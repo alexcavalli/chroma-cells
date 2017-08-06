@@ -6,7 +6,8 @@ import CellActions from './CellActions';
 export const types = {
   START_GAME: 'START_GAME',
   PLAY_CELL: 'PLAY_CELL',
-  REVERSE_PLAY_CELL: 'REVERSE_PLAY_CELL'
+  REVERSE_PLAY_CELL: 'REVERSE_PLAY_CELL',
+  TOGGLE_CHEAT_MODE: 'TOGGLE_CHEAT_MODE'
 };
 
 export const actionCreators = {
@@ -18,6 +19,9 @@ export const actionCreators = {
   },
   reversePlayCell: cellCoords => {
     return { type: types.REVERSE_PLAY_CELL, payload: cellCoords };
+  },
+  toggleCheatMode: () => {
+    return { type: types.TOGGLE_CHEAT_MODE };
   }
 };
 
@@ -39,7 +43,8 @@ initialCells = CellActions.playRandomReverseCells(
 const initialState = {
   settings: initialSettings,
   cells: initialCells,
-  win: false
+  win: false,
+  cheatMode: true
 };
 
 export const reducer = (state = initialState, action) => {
@@ -57,7 +62,8 @@ export const reducer = (state = initialState, action) => {
       return {
         cells: cells,
         settings: settings,
-        win: false // there's an edge case that the generated board could be a win.
+        win: false, // there's an edge case that the generated board could be a win.
+        cheatMode: true
       };
     }
     case types.PLAY_CELL: {
@@ -97,6 +103,12 @@ export const reducer = (state = initialState, action) => {
         ...state,
         cells: newCells,
         win: isWin
+      };
+    }
+    case types.TOGGLE_CHEAT_MODE: {
+      return {
+        ...state,
+        cheatMode: !state.cheatMode
       };
     }
     default: {
