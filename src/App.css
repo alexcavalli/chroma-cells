@@ -11,3 +11,12 @@
   height: 80px;
   padding: 20px;
 }
+
+.App-cell-row {
+  margin-top: 5px;
+}
+
+.App-cell-grid {
+  display: block;
+  margin: 20px 0;
+}

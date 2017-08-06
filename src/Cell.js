@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { CSSTransitionGroup } from 'react-transition-group';
 import './Cell.css';
 
 class Cell extends Component {
   color() {
     if (this.props.value === 1) {
-      return 'white';
+      return 'blue';
     } else if (this.props.value === 2) {
       return 'black';
     } else {
@@ -13,20 +14,30 @@ class Cell extends Component {
   }
 
   render() {
-    const { onClickCell, cycle } = this.props;
+    const { onClickCell, value, cycle } = this.props;
 
     return (
-      <div
+      <CSSTransitionGroup
+        component="div"
         className="Cell"
         onClick={onClickCell}
-        style={{ backgroundColor: this.color() }}
+        transitionName="Cell-flip"
+        transitionEnterTimeout={500}
+        transitionLeaveTimeout={500}
       >
-        <p style={{ color: 'green' }}>
-          {cycle}
-        </p>
-      </div>
+        <div className="Cell-flipper" key={value}>
+          <div
+            className="Cell-panel"
+            style={{ backgroundColor: this.color() }}
+          />
+        </div>
+      </CSSTransitionGroup>
     );
   }
 }
 
 export default Cell;
+
+// <p style={{ color: 'green' }}>
+//   {cycle}
+// </p>

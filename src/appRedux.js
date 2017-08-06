@@ -44,7 +44,7 @@ const initialState = {
   settings: initialSettings,
   cells: initialCells,
   win: false,
-  cheatMode: true
+  cheatMode: false
 };
 
 export const reducer = (state = initialState, action) => {

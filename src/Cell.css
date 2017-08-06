@@ -1,20 +1,42 @@
 .Cell {
-  height: 50px;
-  width: 50px;
-  background-color: white;
-  border-color: black;
-  border-width: 2px;
-  border-style: solid;
   cursor: pointer;
   display: inline-block;
+  height: 50px;
   margin: 0 5px;
+  perspective: 1000px;
+  position: relative;
+  width: 50px;
 }
 
-.Cell-row {
-  margin-top: 5px;
+.Cell-flipper {
+  height: 50px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transform: rotateY(0deg);
+  transform-style: preserve-3d;
+  transition: 300ms;
+  width: 50px;
 }
 
-.Cell-grid {
-  display: block;
-  margin: 20px 0px;
+.Cell-panel {
+  backface-visibility: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.Cell-flip-enter {
+  transform: rotateY(180deg);
+}
+
+.Cell-flip-enter.Cell-flip-enter-active {
+  transform: rotateY(0deg);
+}
+
+.Cell-flip-leave {
+  transform: rotateY(0deg);
+}
+
+.Cell-flip-leave.Cell-flip-leave-active {
+  transform: rotateY(180deg);
 }

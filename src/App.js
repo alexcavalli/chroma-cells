@@ -37,7 +37,7 @@ class App extends Component {
 
     return Array(depth).fill().map((_, z) => {
       return (
-        <div key={['grid', z].join('-')} className="Cell-grid">
+        <div key={['grid', z].join('-')} className="App-cell-grid">
           {this.renderCellGrid(z)}
         </div>
       );
@@ -49,7 +49,7 @@ class App extends Component {
 
     return Array(height).fill().map((_, y) => {
       return (
-        <div key={['row', y, z].join('-')} className="Cell-row">
+        <div key={['row', y, z].join('-')} className="App-cell-row">
           {this.renderCellRow(y, z)}
         </div>
       );

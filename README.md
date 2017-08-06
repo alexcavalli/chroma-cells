@@ -1,8 +1,6 @@
 # Chroma Cells
 
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
-
-Lots of help was obtained from the [React Express tutorial/guide](http://www.react.express/).
+A game where you try to make all the tiles the same color.
 
 ## FAQ
 
@@ -49,3 +47,13 @@ I have found a 3D game with 3 cycles to be an exercise in frustration.
 
 See above - reduce number/size of dimensions (marginal difficulty change), or
 reduce number of cycles (significant difficulty change).
+
+## Credits
+
+This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+
+Lots of help was obtained from the [React Express tutorial/guide](http://www.react.express/).
+
+Roughly followed [David Walsh's guide](https://davidwalsh.name/css-flip) for
+making cells "flippable" via CSS:
+
