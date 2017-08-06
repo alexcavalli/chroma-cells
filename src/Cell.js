@@ -22,14 +22,15 @@ class Cell extends Component {
         className="Cell"
         onClick={onClickCell}
         transitionName="Cell-flip"
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={500}
+        transitionEnterTimeout={300}
+        transitionLeaveTimeout={300}
       >
         <div className="Cell-flipper" key={value}>
-          <div
-            className="Cell-panel"
-            style={{ backgroundColor: this.color() }}
-          />
+          <div className="Cell-panel" style={{ backgroundColor: this.color() }}>
+            <p style={{ color: 'white' }}>
+              {cycle}
+            </p>
+          </div>
         </div>
       </CSSTransitionGroup>
     );
@@ -37,7 +38,3 @@ class Cell extends Component {
 }
 
 export default Cell;
-
-// <p style={{ color: 'green' }}>
-//   {cycle}
-// </p>
