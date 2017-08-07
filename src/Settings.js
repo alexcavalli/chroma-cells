@@ -41,7 +41,9 @@ class Settings extends Component {
   }
 
   render() {
-    const { width, height, depth, cycles, displayCheatMode } = this.state;
+    const { displayCheatMode, onUpdateSettings, onClickCheatMode } = this.props;
+    const { width, height, depth, cycles } = this.state;
+
     return (
       <div className="Settings">
         <div className="Settings-dropdowns">
@@ -54,17 +56,15 @@ class Settings extends Component {
           <button
             className="Settings-button"
             onClick={() => {
-              this.props.onUpdateSettings(this.state);
+              onUpdateSettings(this.state);
             }}
           >
             Start Game
           </button>
-          <button
-            className="Settings-button"
-            onClick={this.props.onClickCheatMode}
-          >
-            Cheat Mode
-          </button>
+          {displayCheatMode &&
+            <button className="Settings-button" onClick={onClickCheatMode}>
+              Cheat Mode
+            </button>}
         </div>
       </div>
     );

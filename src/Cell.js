@@ -9,17 +9,20 @@ class Cell extends Component {
   }
 
   colorClass() {
+    if (this.props.win) {
+      return 'Cell-gold';
+    }
     return this.colorClasses[this.props.value - 1];
   }
 
   render() {
-    const { onClickCell, value, cycle } = this.props;
+    const { onClickCell, value, cycle, win } = this.props;
 
     return (
       <CSSTransitionGroup
         component="div"
         className="Cell"
-        onClick={onClickCell}
+        onClick={!win && onClickCell}
         transitionName="Cell-flip"
         transitionEnterTimeout={300}
         transitionLeaveTimeout={300}

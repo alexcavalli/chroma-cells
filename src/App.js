@@ -66,7 +66,7 @@ class App extends Component {
   }
 
   renderCell(x, y, z) {
-    const { cells, cheatMode } = this.props;
+    const { cells, cheatMode, win } = this.props;
     const thisCell = cells[z][y][x];
     const cycle = cheatMode && thisCell.cycle;
 
@@ -77,6 +77,7 @@ class App extends Component {
         }}
         value={thisCell.value}
         cycle={cycle}
+        win={win}
         key={[x, y, z].join('-')}
       />
     );
