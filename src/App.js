@@ -89,7 +89,7 @@ class App extends Component {
       <div className="App">
         <div className="App-header">
           <h2>
-            {win ? `You Win! (${movesMade} moves)` : 'Chroma Cells'}
+            {win ? `You Win! (${movesMade} moves)` : 'Chroma Tiles'}
           </h2>
         </div>
         <div className="App-settings">
