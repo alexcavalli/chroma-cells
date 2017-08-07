@@ -10,6 +10,7 @@ const mapStateToProps = state => ({
   settings: state.settings,
   cells: state.cells,
   win: state.win,
+  movesMade: state.movesMade,
   cheatMode: state.cheatMode
 });
 
@@ -82,16 +83,21 @@ class App extends Component {
   }
 
   render() {
-    const { settings, win } = this.props;
+    const { settings, win, movesMade } = this.props;
     return (
       <div className="App">
         <div className="App-header">
-          <h2>Chroma Cells</h2>
-          {win && <h2>You win.</h2>}
+          <h2>
+            {win ? `You Win! (${movesMade} moves)` : 'Chroma Cells'}
+          </h2>
         </div>
         <div className="App-settings">
-          <Settings settings={settings} onUpdateSettings={this.onStartGame} />
-          <button onClick={this.onToggleCheatMode}>Cheat Mode</button>
+          <Settings
+            settings={settings}
+            onUpdateSettings={this.onStartGame}
+            displayCheatMode={movesMade > 50}
+            onClickCheatMode={this.onToggleCheatMode}
+          />
         </div>
         <div className="App-container">
           {this.renderCellGrids()}

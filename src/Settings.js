@@ -18,10 +18,11 @@ class Settings extends Component {
 
   renderDropdown(id, label, options, currentValue) {
     return (
-      <div>
+      <div className="Settings-dropdown">
         <label name={id}>
           {label}
         </label>
+        <br />
         <select
           id={id}
           value={currentValue}
@@ -40,20 +41,31 @@ class Settings extends Component {
   }
 
   render() {
-    const { width, height, depth, cycles } = this.state;
+    const { width, height, depth, cycles, displayCheatMode } = this.state;
     return (
       <div className="Settings">
-        {this.renderDropdown('width', 'Width', [2, 3, 4, 5], width)}
-        {this.renderDropdown('height', 'Height', [2, 3, 4, 5], height)}
-        {this.renderDropdown('depth', 'Depth', [1, 2, 3], depth)}
-        {this.renderDropdown('cycles', 'Colors', [2, 3], cycles)}
-        <button
-          onClick={() => {
-            this.props.onUpdateSettings(this.state);
-          }}
-        >
-          Go
-        </button>
+        <div className="Settings-dropdowns">
+          {this.renderDropdown('width', 'Width', [2, 3, 4, 5], width)}
+          {this.renderDropdown('height', 'Height', [2, 3, 4, 5], height)}
+          {this.renderDropdown('depth', 'Depth', [1, 2, 3], depth)}
+          {this.renderDropdown('cycles', 'Colors', [2, 3], cycles)}
+        </div>
+        <div className="Settings-buttons">
+          <button
+            className="Settings-button"
+            onClick={() => {
+              this.props.onUpdateSettings(this.state);
+            }}
+          >
+            Start Game
+          </button>
+          <button
+            className="Settings-button"
+            onClick={this.props.onClickCheatMode}
+          >
+            Cheat Mode
+          </button>
+        </div>
       </div>
     );
   }

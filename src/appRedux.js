@@ -44,11 +44,12 @@ const initialState = {
   settings: initialSettings,
   cells: initialCells,
   win: false,
+  movesMade: 0,
   cheatMode: false
 };
 
 export const reducer = (state = initialState, action) => {
-  const { cells, settings } = state;
+  const { cells, settings, movesMade } = state;
   const { type } = action;
 
   switch (type) {
@@ -83,7 +84,8 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         cells: newCells,
-        win: isWin
+        win: isWin,
+        movesMade: movesMade + 1
       };
     }
     case types.REVERSE_PLAY_CELL: {
@@ -102,7 +104,8 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         cells: newCells,
-        win: isWin
+        win: isWin,
+        movesMade: movesMade + 1
       };
     }
     case types.TOGGLE_CHEAT_MODE: {
