@@ -2,6 +2,8 @@
 
 A game where you try to make all the tiles the same color.
 
+[See it here!](https://alexcavalli.github.io/chroma-tiles/)
+
 ## FAQ
 
 ### What is this.
@@ -10,6 +12,10 @@ This is just a toy app to play with/learn React and Redux and a bit of CSS as
 well.
 
 ### How do I run it?
+
+[There's a demo here.](https://alexcavalli.github.io/chroma-tiles/)
+
+Run locally via:
 
 `npm start`
 
