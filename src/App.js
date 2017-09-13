@@ -123,8 +123,8 @@ class App extends Component {
         </div>
         <div className="App-footer">
           <div>
-            <a href="#" onClick={this.onShowInstructions}>
-              Instructions
+            <a href="#instructions" onClick={this.onShowInstructions}>
+              Show Instructions Again
             </a>
           </div>
           <div>
