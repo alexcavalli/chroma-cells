@@ -35,6 +35,12 @@ class App extends Component {
     dispatch(actionCreators.toggleCheatMode());
   };
 
+  onShowInstructions = () => {
+    const { dispatch } = this.props;
+
+    dispatch(actionCreators.showInstructions());
+  };
+
   onCloseInstructions = () => {
     const { dispatch } = this.props;
 
@@ -116,9 +122,16 @@ class App extends Component {
           {this.renderCellGrids()}
         </div>
         <div className="App-footer">
-          <a href="https://github.com/alexcavalli/chroma-tiles">
-            Code on GitHub
-          </a>
+          <div>
+            <a href="#" onClick={this.onShowInstructions}>
+              Instructions
+            </a>
+          </div>
+          <div>
+            <a href="https://github.com/alexcavalli/chroma-tiles">
+              Code on GitHub
+            </a>
+          </div>
         </div>
         {showInstructions &&
           <Instructions onCloseInstructions={this.onCloseInstructions} />}

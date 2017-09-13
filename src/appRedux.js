@@ -8,6 +8,7 @@ export const types = {
   PLAY_CELL: 'PLAY_CELL',
   REVERSE_PLAY_CELL: 'REVERSE_PLAY_CELL',
   TOGGLE_CHEAT_MODE: 'TOGGLE_CHEAT_MODE',
+  SHOW_INSTRUCTIONS: 'SHOW_INSTRUCTIONS',
   CLOSE_INSTRUCTIONS: 'CLOSE_INSTRUCTIONS'
 };
 
@@ -23,6 +24,9 @@ export const actionCreators = {
   },
   toggleCheatMode: () => {
     return { type: types.TOGGLE_CHEAT_MODE };
+  },
+  showInstructions: () => {
+    return { type: types.SHOW_INSTRUCTIONS };
   },
   closeInstructions: () => {
     return { type: types.CLOSE_INSTRUCTIONS };
@@ -119,6 +123,12 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         cheatMode: !state.cheatMode
+      };
+    }
+    case types.SHOW_INSTRUCTIONS: {
+      return {
+        ...state,
+        showInstructions: true
       };
     }
     case types.CLOSE_INSTRUCTIONS: {

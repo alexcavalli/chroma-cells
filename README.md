@@ -63,3 +63,5 @@ Lots of help was obtained from the [React Express tutorial/guide](http://www.rea
 Roughly followed [David Walsh's guide](https://davidwalsh.name/css-flip) for
 making tiles "flippable" via CSS.
 
+Followed [Lynn Wallenstein's Guide](http://lynn.io/2014/02/22/modalin/) for
+making a centered modal.
