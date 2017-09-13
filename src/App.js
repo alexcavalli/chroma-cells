@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { actionCreators } from './appRedux';
 import Cell from './Cell.js';
 import Settings from './Settings.js';
+import Instructions from './Instructions.js';
 import './App.css';
 
 const mapStateToProps = state => ({
@@ -11,7 +12,8 @@ const mapStateToProps = state => ({
   cells: state.cells,
   win: state.win,
   movesMade: state.movesMade,
-  cheatMode: state.cheatMode
+  cheatMode: state.cheatMode,
+  showInstructions: state.showInstructions
 });
 
 class App extends Component {
@@ -33,12 +35,22 @@ class App extends Component {
     dispatch(actionCreators.toggleCheatMode());
   };
 
+  onCloseInstructions = () => {
+    const { dispatch } = this.props;
+
+    dispatch(actionCreators.closeInstructions());
+  };
+
   renderCellGrids() {
     const { depth } = this.props.settings;
 
     return Array(depth).fill().map((_, z) => {
       return (
         <div key={['grid', z].join('-')} className="App-cell-grid">
+          {depth > 1 &&
+            <h5 className="App-cell-grid-title">
+              Layer {z + 1}
+            </h5>}
           {this.renderCellGrid(z)}
         </div>
       );
@@ -84,7 +96,7 @@ class App extends Component {
   }
 
   render() {
-    const { settings, win, movesMade } = this.props;
+    const { settings, win, movesMade, showInstructions } = this.props;
     return (
       <div className="App">
         <div className="App-header">
@@ -103,6 +115,13 @@ class App extends Component {
         <div className="App-container">
           {this.renderCellGrids()}
         </div>
+        <div className="App-footer">
+          <a href="https://github.com/alexcavalli/chroma-tiles">
+            Code on GitHub
+          </a>
+        </div>
+        {showInstructions &&
+          <Instructions onCloseInstructions={this.onCloseInstructions} />}
       </div>
     );
   }

@@ -1,0 +1,55 @@
+.Instructions-modal {
+  max-height: calc(100% - 10px);
+  position: fixed;
+  top: 50%;
+  left: 10%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-5%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  z-index: 2;
+}
+
+@media screen and (min-width: 480px) {
+  .Instructions-modal {
+    max-height: calc(100% - 100px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+  }
+}
+
+.Instructions-body {
+  height: 100%;
+  overflow: auto;
+  overflow-y: scroll;
+}
+
+.Instructions-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.Instructions-button {
+  background-color: #ccc;
+  background-image: linear-gradient(
+    to right top,
+    hsl(191, 65%, 40%),
+    hsl(191, 65%, 60%)
+  );
+  border-radius: 5px;
+  border-style: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1em;
+  padding: 10px 10px;
+  margin: 2px 5px;
+}

@@ -7,7 +7,8 @@ export const types = {
   START_GAME: 'START_GAME',
   PLAY_CELL: 'PLAY_CELL',
   REVERSE_PLAY_CELL: 'REVERSE_PLAY_CELL',
-  TOGGLE_CHEAT_MODE: 'TOGGLE_CHEAT_MODE'
+  TOGGLE_CHEAT_MODE: 'TOGGLE_CHEAT_MODE',
+  CLOSE_INSTRUCTIONS: 'CLOSE_INSTRUCTIONS'
 };
 
 export const actionCreators = {
@@ -22,6 +23,9 @@ export const actionCreators = {
   },
   toggleCheatMode: () => {
     return { type: types.TOGGLE_CHEAT_MODE };
+  },
+  closeInstructions: () => {
+    return { type: types.CLOSE_INSTRUCTIONS };
   }
 };
 
@@ -45,7 +49,8 @@ const initialState = {
   cells: initialCells,
   win: false,
   movesMade: 0,
-  cheatMode: false
+  cheatMode: false,
+  showInstructions: true
 };
 
 export const reducer = (state = initialState, action) => {
@@ -65,7 +70,8 @@ export const reducer = (state = initialState, action) => {
         settings: settings,
         win: false, // there's an edge case that the generated board could be a win.
         movesMade: 0,
-        cheatMode: false
+        cheatMode: false,
+        showInstructions: false
       };
     }
     case types.PLAY_CELL: {
@@ -113,6 +119,12 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         cheatMode: !state.cheatMode
+      };
+    }
+    case types.CLOSE_INSTRUCTIONS: {
+      return {
+        ...state,
+        showInstructions: false
       };
     }
     default: {
